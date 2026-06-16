@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다현's 미니홈피 ★~</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/DungGeunMo.woff">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'DungGeunMo', monospace;
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-8/sym755.cur'), auto;
+        }
+        
+        body {
+            background-color: #85c1e9;
+            background-image: radial-gradient(#5dade2 20%, transparent 20%), radial-gradient(#5dade2 20%, transparent 20%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* 미니홈피 외곽 테두리 */
+        .cy-wrapper {
+            background: #f0f0f0;
+            border: 4px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 8px 8px 0px #222;
+            display: flex;
+            width: 950px;
+            height: 620px;
+            position: relative;
+        }
+
+        /* 내부 점선 테두리 */
+        .cy-container {
+            border: 2px dashed #999;
+            border-radius: 5px;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            background: #fff;
+        }
+
+        /* 왼쪽 사이드바 (프로필, 미니룸, 향수) */
+        .side-bar {
+            width: 260px;
+            height: 100%;
+            border-right: 2px dashed #ccc;
+            padding-right: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .visitor-count {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .visitor-count .today { color: red; font-weight: bold; }
+
+        .profile-box {
+            border: 2px solid #666;
+            padding: 10px;
+            background: #fafafa;
+            text-align: center;
+        }
+
+        .avatar-area {
+            width: 100%;
+            height: 130px;
+            background: #e5e7e9;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .pixel-avatar {
+            font-size: 40px;
+            margin-bottom: 5px;
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce { 
+            from { transform: translateY(0); } 
+            to { transform: translateY(-5px); } 
+        }
+
+        .profile-text {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+            text-align: left;
+            border-top: 1px dashed #ccc;
+            padding-top: 8px;
+        }
+
+        /* 오늘의 향수 코너 */
+        .scent-box {
+            border: 2px inset #fff;
+            background: #fcedf2;
+            padding: 8px;
+            font-size: 12px;
+            border: 2px solid #ffb6c1;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .scent-title {
+            color: #ff4a75;
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .scent-btn {
+            background: #ff4a75;
+            color: white;
+            border: 1px solid #333;
+            padding: 2px 5px;
+            font-size: 11px;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        /* 오른쪽 메인 영역 */
+        .main-content {
+            flex: 1;
+            padding-left: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* 상단 음악 플레이어 & 홈피 제목 */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff8c00;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .home-title {
+            font-size: 18px;
+            color: #2e4053;
+            font-weight: bold;
+        }
+        .bgm-player {
+            background: #333;
+            color: #00ff00;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bgm-title {
+            width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        /* 콘텐츠 윈도우 스크린 */
+        .content-body {
+            flex: 1;
+            position: relative;
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .tab-page {
+            display: none;
+            height: 100%;
+        }
+        .tab-page.active {
+            display: block;
+        }
+
+        /* 가짜 광고 배너 */
+        .fake-ad {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            border: 2px solid #333;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            animation: blink 0.8s infinite alternate;
+        }
+        @keyframes blink {
+            from { opacity: 0.9; }
+            to { opacity: 1; filter: hue-rotate(90deg); }
+        }
+
+        /* 세로 탭 메뉴 */
+        .tab-menu {
+            position: absolute;
+            right: -44px;
+            top: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .tab-btn {
+            background: #ff8c00;
+            color: white;
+            border: 2px solid #333;
+            border-left: none;
+            border-radius: 0 5px 5px 0;
+            padding: 8px 6px;
+            font-size: 13px;
+            writing-mode: vertical-lr;
+            text-orientation: upright;
+            letter-spacing: 2px;
+        }
+        .tab-btn.active {
+            background: #fff;
+            color: #333;
+            border-right: 2px dashed #fff;
+            position: relative;
+            left: -2px;
+            z-index: 10;
+        }
+
+        /* PC 통신 모드 스타일 */
+        .pcterminal {
+            background: #0000aa;
+            color: #ffffff;
+            font-family: monospace;
+            padding: 15px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 3px double #fff;
+        }
+        .pc-output {
+            flex: 1;
+            overflow-y: auto;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        .pc-input-line {
+            display: flex;
+            border-top: 1px solid #fff;
+            padding-top: 5px;
+            font-size: 14px;
+        }
+        .pc-input {
+            background: transparent;
+            border: none;
+            color: #00ff00;
+            flex: 1;
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* 뮤직 샵 스타일 */
+        .music-list {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .music-list th { background: #e5e7e9; padding: 6px; border: 1px solid #ccc; }
+        .music-list td { padding: 8px; border: 1px solid #ccc; text-align: center; }
+        .buy-btn { background: #ff8c00; color: #fff; border: 1px solid #333; padding: 2px 6px; }
+
+        /* 사진첩 스타일 */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .photo-card {
+            border: 1px solid #ccc;
+            background: #fff;
+            padding: 8px;
+            box-shadow: 3px 3px 0 #eee;
+        }
+        .photo-img {
+            width: 100%;
+            height: 120px;
+            background: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            border: 1px solid #bbb;
+        }
+        .photo-caption { font-size: 12px; margin-top: 5px; color: #333; }
+        .scrap-btn { float: right; background: none; border: 1px dashed #999; font-size: 11px; }
+
+        /* 상태 데코레이션 */
+        .tmi-item { margin-bottom: 10px; font-size: 14px;}
+        .tmi-tag { background: #ff8c00; color: white; padding: 1px 4px; border-radius: 3px; font-size: 11px; margin-right: 5px;}
+    </style>
+</head>
+<body>
+
+<div class="cy-wrapper">
+    <div class="cy-container">
+        
+        <div class="side-bar">
+            <div>
+                <div class="visitor-count">TODAY <span class="today">48</span> | TOTAL 1234</div>
+                <div class="profile-box">
+                    <div class="avatar-area">
+                        <div class="pixel-avatar">🧙‍♀️</div>
+                        <div><b>유다현</b> (차분함)</div>
+                    </div>
+                    <div class="profile-text">
+                        " 흘러가는대로 살자 " <br><br>
+                        소개글: 차분한 분위기 속에 숨겨진 강력한 아재개그 본능! 문화예술과 케이팝을 사랑하는 다현이의 미니홈피입니다. 파도타기 환영..★
+                    </div>
+                </div>
+            </div>
+
+            <div class="scent-box">
+                <div class="scent-title">🧪 오늘의 향수 Mood</div>
+                <div id="scent-display">버튼을 눌러 향기를 시향해보세요.</div>
+                <button class="scent-btn" onclick="changeScent()">치익- 향수 뿌리기</button>
+            </div>
+
+            <select style="width:100%; padding:4px; font-size:12px; border:2px solid #333;" onchange="if(this.value) alert(this.value + ' 일촌 홈페이지로 파도타기!');">
+                <option value="">::: 일촌 파도타기 :::</option>
+                <option value="홍길동">홍길동 (방가방가)</option>
+                <option value="고남순">고남순 (퍼가요~)</option>
+                <option value="이신아">이신아 (ㄴH가쵝오)</option>
+            </select>
+        </div>
+
+        <div class="main-content">
+            <div class="main-header">
+                <div class="home-title">다현이네 오신것을 환영합ㄴl다_☆</div>
+                <div class="bgm-player">
+                    <span>▶ BGM:</span>
+                    <div class="bgm-title" id="current-bgm">Y2K 프리스타일 - Y (Please Tell Me Why)</div>
+                </div>
+            </div>
+
+            <div class="content-body">
+                
+                <div id="profile" class="tab-page active">
+                    <h3 style="border-bottom: 1px solid #ccc; padding-bottom:5px; margin-top:0;">[프로필] 다현이를 소개합니다</h3>
+                    <div class="tmi-item"><span class="tmi-tag">관심분야</span> 문화예술, 케이팝(K-POP), 패션</div>
+                    <div class="tmi-item"><span class="tmi-tag">취미생활</span> 영화/드라마 보기, 뮤지컬 관람, 음악 감상</div>
+                    <div class="tmi-item"><span class="tmi-tag">최애아이템</span> 향수 🧪 (좋은 향 맡으면 행복해져요)</div>
+                    <div class="tmi-item"><span class="tmi-tag">특기사항</span> 아재개그 (피할 수 없을 걸요?)</div>
+                    <br>
+                    <fieldset style="border:2px dashed #ff8c00; padding:10px; background:#fffbf0;">
+                        <legend style="color:#ff8c00; font-weight:bold;"> 🎯 나의 목표 & 꿈 </legend>
+                        <p style="margin:5px 0; font-size:14px;"><b>현재 가장 큰 목표:</b> 대학 합격!! 🎓</p>
+                        <p style="margin:5px 0; font-size:14px;"><b>앞으로 꼭 해보고 싶은 것:</b> 굉음과 스피드의 축제! F1 경기 직관하러 가기 🏎️💨</p>
+                    </fieldset>
+                </div>
+
+                <div id="chat" class="tab-page">
+                    <div class="pcterminal">
+                        <div class="pc-output" id="pc-output">=== 하이텔(HiTEL) 나우누리 PC통신 접속 ===
+명령어를 입력하세요.
+[1] 다현이의 아재개그 듣기
+[2] 다현이에게 한마디 하기
+[3] 터미널 종료하기
+=========================================
+▷ 봇: 안녕? 난 다현이의 아바타야.. 무얼 알고 싶니? (번호나 텍스트를 쳐봐!)</div>
+                        <div class="pc-input-line">
+                            <span>형님들 입력: </span>
+                            <input type="text" class="pc-input" id="pc-input" onkeypress="handlePcChat(event)" placeholder="여기에 입력 후 엔터...">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="music" class="tab-page">
+                    <h3 style="border-bottom: 1px solid #ccc; padding-bottom:5px; margin-top:0;">[뮤직숍] 도토리로 BGM 사기 (보유 도토리: <span id="dotori">5</span>개)</h3>
+                    <table class="music-list">
+                        <thead>
+                            <tr><th>곡명 / 아티스트</th><th>가격</th><th>선택</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Y (Please Tell Me Why) - 프리스타일</td><td>도토리 5개</td><td><button class="buy-btn" onclick="buyMusic('프리스타일 - Y')">설정</button></td></tr>
+                            <tr><td>Snowman - Sia</td><td>도토리 3개</td><td><button class="buy-btn" onclick="buyMusic('Sia - Snowman')">구매</button></td></tr>
+                            <tr><td>발걸음 - 에메랄드 캐슬</td><td>도토리 3개</td><td><button class="buy-btn" onclick="buyMusic('에메랄드 캐슬 - 발걸음')">구매</button></td></tr>
+                            <tr><td>Drama - aespa</td><td>도토리 4개</td><td><button class="buy-btn" onclick="buyMusic('aespa - Drama')">구매</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="photo" class="tab-page">
+                    <h3 style="border-bottom: 1px solid #ccc; padding-bottom:5px; margin-top:0;">[사진첩] 나의 소중한 추억들</h3>
+                    <div class="photo-grid">
+                        <div class="photo-card">
+                            <div class="photo-img">🎬</div>
+                            <div class="photo-caption">
+                                <b>영화/뮤지컬 탐방기</b> <button class="scrap-btn" onclick="alert('퍼가요~♡ 완료!')">퍼가요~♡</button>
+                                <p style="font-size:11px; margin:3px 0; color:#666;">최근에 본 작품 기록용 폴더.</p>
+                            </div>
+                        </div>
+                        <div class="photo-card">
+                            <div class="photo-img">🏎️</div>
+                            <div class="photo-caption">
+                                <b>미래의 F1 직관 스포일러</b> <button class="scrap-btn" onclick="alert('퍼가요~♡ 완료!')">퍼가요~♡</button>
+                                <p style="font-size:11px; margin:3px 0; color:#666;">언젠가 버킷리스트를 이룰 날을 기약하며.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="fake-ad" onclick="alert('낚이셨습니다! ˚ෆ˚ 사실 광고가 아니라 제 깃허브나 SNS 링크를 넣을 자리랍니다.')">
+                ★ [파격 특가] 지금 바로 일촌 신청하면 도토리 100개 전원 지급! ☞ CLICK ★
+            </div>
+
+            <div class="tab-menu">
+                <button class="tab-btn active" onclick="switchTab(this, 'profile')">프로필</button>
+                <button class="tab-btn" onclick="switchTab(this, 'chat')">PC통신</button>
+                <button class="tab-btn" onclick="switchTab(this, 'music')">뮤직숍</button>
+                <button class="tab-btn" onclick="switchTab(this, 'photo')">사진첩</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 탭 전환 시스템
+    function switchTab(btn, pageId) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+        
+        btn.classList.add('active');
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    // 향수 추천 랜덤 리스트
+    const perfumes = [
+        "🧪 불가리 쁘띠마망\n(아기 분내 대명사... 은은하고 순수함 한 스푼 ★)",
+        "🧪 데메테르 세탁건조기 향\n(뽀송한 빨래 냄새. 99%의 깨끗함과 1%의 쓸쓸함...)",
+        "🧪 인칸토 참\n(새콤달콤 청포도 향기! Y2K 감성 필수 아이템)",
+        "🧪 딥티크 탐다오\n(비 오는 날 차분한 사찰의 우디한 향... 촉촉한 내 눈물 같아..)"
+    ];
+    function changeScent() {
+        const randomScent = perfumes[Math.floor(Math.random() * perfumes.length)];
+        document.getElementById('scent-display').innerText = randomScent;
+    }
+
+    // 도토리 음악 구매 및 적용
+    let currentDotori = 5;
+    function buyMusic(trackName) {
+        if(trackName.includes('프리스타일')) {
+            document.getElementById('current-bgm').innerText = trackName;
+            alert("BGM으로 설정되었습니다!");
+            return;
+        }
+        if (currentDotori >= 3) {
+            currentDotori -= 3;
+            document.getElementById('dotori').innerText = currentDotori;
+            document.getElementById('current-bgm').innerText = trackName;
+            alert(`[${trackName}] 구매 성공! BGM으로 자동 적용됩니다. 남은 도토리: ${currentDotori}개`);
+        } else {
+            alert("도토리가 부족합니다! 가짜 광고를 누르면 생길지도..?");
+        }
+    }
+
+    // PC 통신 아재개그 리스트
+    const jokes = [
+        "▷ 봇: 왕이 넘어지면? 킹콩! 캬캬캬~",
+        "▷ 봇: 청바지를 영어로 하면? 블루진! 그럼 가짜 청바지는? 서브웨이진! 푸훕-",
+        "▷ 봇: 설마가 사람 잡는대매? 그럼 설마가 잡은 사람은 누구게? 설마가 잡은 사람이지롱~"
+    ];
+
+    // PC 통신 대화 로직
+    function handlePcChat(e) {
+        if(e.key === 'Enter') {
+            const input = document.getElementById('pc-input');
+            const output = document.getElementById('pc-output');
+            const text = input.value.trim();
+            
+            if(!text) return;
+
+            let response = "▷ 봇: 올바른 명령어를 입력해줘.. [1] 또는 [2]를 쳐보라구.";
+            
+            if(text === '1') {
+                response = jokes[Math.floor(Math.random() * jokes.length)];
+            } else if(text === '2') {
+                response = "▷ 봇: 고마워! 네가 남긴 말은 다현이의 마음속 소리함에 저장되었어..☆ (대학합격 기원!)";
+            } else if(text === '3') {
+                response = "▷ 봇: 접속을 종료하면 일촌이 끊길지도 몰라.. 계속 대화하자!";
+            } else {
+                response = `▷ 봇: "${text}" 라고 했니? 후훗, 넌 참 재밌는 일촌이구나.`;
+            }
+
+            output.innerText += `\n\n▶ 나: ${text}\n${response}`;
+            input.value = '';
+            output.scrollTop = output.scrollHeight; // 스크롤 하단 고정
+        }
+    }
+</script>
+
+</body>
+</html>
